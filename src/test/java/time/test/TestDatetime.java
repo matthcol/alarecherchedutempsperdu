@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
@@ -30,12 +32,16 @@ class TestDatetime {
 	@Test
 	void testDateInternational() {
 		ZoneId argTz = ZoneId.of("America/Buenos_Aires");
-		Locale argLocale = new Locale("arg", "esp");
-		System.out.println(argLocale);
 		var quand = LocalDateTime.now(argTz);
 		System.out.println(quand);
-		System.out.println(
-				quand.format(DateTimeFormatter.ofPattern("eeee dd/MM/Y", argLocale)));
+		//Locale argLocale = new Locale("esp", "arg");
+		Locale[] locales = Locale.getAvailableLocales();
+		Arrays.sort(locales, Comparator.comparing(Object::toString));
+		for (Locale loc : locales) {
+			System.out.print(loc + " : ");
+			System.out.println(
+				quand.format(DateTimeFormatter.ofPattern("eeee dd/MM/Y", loc)));
+		}
 	}
 	
 	@Test
