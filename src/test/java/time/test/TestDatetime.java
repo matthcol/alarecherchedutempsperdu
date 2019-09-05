@@ -1,7 +1,10 @@
 package time.test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -86,6 +89,24 @@ class TestDatetime {
 	void testDateFr() {
 		String dateFr = "07/09/2019";
 		LocalDate date = LocalDate.parse(dateFr, FORMAT_DATE_FR);
-		
+		assertAll(
+				()->assertEquals(2019, date.getYear(), "year"),
+				()->assertEquals(9, date.getMonthValue(), "month"),
+				()->assertEquals(7, date.getDayOfMonth(), "day")
+		);
+	}
+	
+	@ParameterizedTest
+	@ValueSource(ints = {2000, 2004, 2008, 2020, 2400})
+	void testLeapYearOK(int year) {
+		LocalDate february29th = LocalDate.of(year, 2,  29);
+	}
+	
+	@ParameterizedTest
+	@ValueSource(ints = {2019, 2021, 2100, 2200, 2300, 2500})
+	void testLeapYearNOK(int year) {
+		assertThrows(DateTimeException.class, 
+				() -> {LocalDate february29th = LocalDate.of(year, 2,  29);}
+		);
 	}
 }
